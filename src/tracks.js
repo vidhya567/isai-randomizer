@@ -34,27 +34,37 @@ function addSongToQueue(trackUri, accessToken) {
   return callSpotifyApi(url, fetchOptions);
 }
 
-const INITIAL_TRACK_URL = "https://api.spotify.com/v1/me/tracks?limit=50";
+const INITIAL_TRACK_URL = "https://api.spotify.com/v1/me/tracks?limit=10";
 
-function getTracksRecursively(url, tracks, accessToken) {
-  const tracksPromise = getTracks(url, accessToken);
+function getAllTracks(accessToken) {
+  const url = (offset) =>
+    `https://api.spotify.com/v1/me/tracks?limit=50&offset=${offset}`;
+  const generateUrls = (total) => {
+    const offsets = [0];
+    let offset = 50;
+    while (offset < total) {
+      offsets.push(offset);
+      offset += 50;
+    }
+    return offsets.map(url);
+  };
+  const tracksPromise = getTracks(INITIAL_TRACK_URL, accessToken);
   return tracksPromise
     .then((tracksResponse) => {
-      const newTracks = tracksResponse?.items ?? [];
-      const trackList = [...tracks, ...newTracks];
-      const { next } = tracksResponse;
-      if (next) {
-        return getTracksRecursively(next, trackList, accessToken);
+      const { total } = tracksResponse;
+      if (!total) {
+        throw Error("Cant get the total track size");
       }
-      return trackList;
+      const urls = generateUrls(total);
+      const trackPromises = urls.map((url) => getTracks(url, accessToken));
+      return Promise.all(trackPromises);
+    })
+    .then((trackResponses) => {
+      return trackResponses.map(({ items }) => items).flatMap((val) => val);
     })
     .catch((error) => {
       throw error;
     });
-}
-
-function getAllTracks(accessToken) {
-  return getTracksRecursively(INITIAL_TRACK_URL, [], accessToken);
 }
 
 export default function Tracks(props) {
@@ -69,6 +79,7 @@ export default function Tracks(props) {
     setLoading(true);
     getAllTracks(accessToken)
       .then((allTracks) => {
+        console.log("allTracks", allTracks);
         if (allTracks.length > 0) {
           setTracksData(allTracks);
           setLoading(false);
@@ -169,7 +180,6 @@ export default function Tracks(props) {
     console.log(typeof error.message);
     if (typeof error === "string") setStatusText(error);
     if (error.message && typeof error.message === "string") {
-      console.log("setting error message");
       setStatusText(error.message);
     }
   }
