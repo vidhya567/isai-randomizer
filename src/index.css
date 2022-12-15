@@ -7,7 +7,108 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.App {
+  text-align: center;
+  height: 100vh;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.track_list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-inline: 0.1em;
+  margin-block: 0.1em;
+}
+
+.track_list_item {
+  flex: 1 0 0;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+}
+
+.track_title {
+  width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: start;
+  height: 50px;
+}
+
+.track_title .track_title_tooltip  {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: start;
+  padding: 5px 0;
+  border-radius: 6px;
+  bottom: 0px;
+  left: 50%;
+  margin-left: -50%;
+  width: fit-content;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  overflow: scroll;
+}
+
+.track_title:hover .track_title_tooltip {
+  visibility: visible;
+  z-index: 10;
+}
+
+.track_actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 20px;
+  flex: 1 00;
+}
+
+.preview_player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.track_bulk_actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}
+
+.login_page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.status_text {
+  color: white;
+  position: sticky;
+  top: 0px;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 40px;
+  font-size: 15px;
+  background-color: brown;
+  z-index: 10;
+  margin: 0px;
+  justify-content: center;
+  align-items: center;
 }
