@@ -142,8 +142,16 @@ export default function Tracks(props) {
   }
 
   function handleAddSong(track) {
+    let message = "Added song to queue";
+    if (track.name) {
+      message = `Added ${track.name} to queue`;
+    }
     if (track.uri) {
-      addSongToQueue(track.uri, accessToken).catch(handleAsyncError);
+      addSongToQueue(track.uri, accessToken)
+        .then(() => {
+          setStatusText(message);
+        })
+        .catch(handleAsyncError);
     }
   }
 
@@ -189,7 +197,11 @@ export default function Tracks(props) {
   function addAllSongsToQueue() {
     currentTracks.forEach(({ track }) => {
       if (track.uri) {
-        addSongToQueue(track.uri, accessToken).catch(handleAsyncError);
+        addSongToQueue(track.uri, accessToken)
+          .then(() => {
+            setStatusText("Added all songs to queue");
+          })
+          .catch(handleAsyncError);
       }
     });
   }
