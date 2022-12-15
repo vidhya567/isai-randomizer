@@ -9,7 +9,12 @@ function getTracks(url, accessToken) {
 
 function callSpotifyApi(url, fetchOptions) {
   return fetch(url, fetchOptions)
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 204) {
+        return response;
+      }
+      return response.json();
+    })
     .then((response) => {
       if (response?.error) {
         throw Error(response?.error.message);
@@ -166,6 +171,7 @@ export default function Tracks(props) {
 
   function handleTrackPlayClick(trackId) {
     setPlayingTrackId(trackId);
+    setStatusText(null);
   }
 
   function handleRandomClick() {

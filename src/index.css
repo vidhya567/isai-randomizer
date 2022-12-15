@@ -89,6 +89,10 @@ ul {
   gap: 15px;
 }
 
+button:active {
+  background-color: #6B6B6B;
+}
+
 .login_page {
   display: flex;
   flex-direction: column;
