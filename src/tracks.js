@@ -79,7 +79,6 @@ export default function Tracks(props) {
     setLoading(true);
     getAllTracks(accessToken)
       .then((allTracks) => {
-        console.log("allTracks", allTracks);
         if (allTracks.length > 0) {
           setTracksData(allTracks);
           setLoading(false);
@@ -175,9 +174,6 @@ export default function Tracks(props) {
   }
 
   function handleAsyncError(error) {
-    console.log(error);
-    console.log(error.message);
-    console.log(typeof error.message);
     if (typeof error === "string") setStatusText(error);
     if (error.message && typeof error.message === "string") {
       setStatusText(error.message);
